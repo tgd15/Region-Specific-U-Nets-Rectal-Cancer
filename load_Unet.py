@@ -58,34 +58,20 @@ def dice_coef_loss(y_true, y_pred):
     """
     return -dice_coef(y_true, y_pred)
 
-def load_and_predict(ModelPath, testingHDF5, predFileName):
-    """Load U-Net model and predict on a dataset.
+
+def load_Unet_model(ModelPath):
+    """Load Unet model.
     
     Parameters
     ----------
-    ModelPath : string
-        Filepath to saved FCN model
-    testingHDF5 : string
-        Filepath to dataset
-    predFileName: string
-        HDf5 file to which predictions will be saved
-    
+    ModelPath : str
+        Path to HDF5 file containing model structure and weights.
+
     Returns
     -------
-    Returns nothing but saves predictions as HDF5 file
-    
+    loaded_model : keras.Model
+        Keras deep learning model.
+
     """
     loaded_model = load_model(ModelPath, custom_objects={'dice_coef': dice_coef,'dice_coef_loss': dice_coef_loss})
-    with h5py.File(testingHDF5, 'r') as f:
-        X_test = f['testing_Images'][()]
-        test_imag_fileanmes = f['testing_image_filenames'][()]
-    
-    uh_preds = loaded_model.predict(X_test, verbose=1)
-    uh_preds_np = np.array(uh_preds)
-    print ("Shape of UH predictions: " + str(uh_preds_np.shape))
-
-    hd5f_file = h5py.File(datetime.datetime.today().strftime('%Y-%m-%d')+' ' + predFileName, mode='w')
-    hd5f_file.create_dataset('UH_Predictions', data = uh_preds_np)
-    hd5f_file.create_dataset('Prediction_Names', data = test_imag_fileanmes)
-    hd5f_file.close()
-
+    return loaded_model
