@@ -28,6 +28,8 @@ predictions = unet.predict(image_np, verbose=1)
 # Threshold the slices
 if('Lumen' in Model_Name):
     threshold = 0.901763019988
+if('Outer_Rectal_Wall' in Model_Name):
+    threshold = 0.976268057096
     
 predictions = (predictions > threshold).astype(np.float32)
 

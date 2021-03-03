@@ -1,0 +1,4 @@
+Current as of Tuesday, March 2, 2021.
+
+Outer Rectal Wall Threshold: 0.976268057096
+Lumen Threshold: 0.901763019988
