@@ -13,8 +13,8 @@ from resize_img import resize_img
 
 
 def load_image(image_path):
-    image = sitk.ReadImage(image_path)
-    image_np = sitk.GetArrayFromImage(image)
+    mha_image = sitk.ReadImage(image_path)
+    image_np = sitk.GetArrayFromImage(mha_image)
     # Normalize images
     image_np = image_np - np.mean(image_np) #Mean normalization; substract the mean from each pixel value
     image_np = image_np / np.std(image_np) #Divide each pixel value by the standard deviation
@@ -28,6 +28,6 @@ def load_image(image_path):
         resized_slices.append(resized_slice)
     
     resized_imgs = np.array(resized_slices)
-    return resized_imgs
+    return resized_imgs, mha_image
     
     
