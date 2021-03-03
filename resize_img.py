@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import cv2
 
-def resize_img(img_slice, new_size, plot=False, filepath=None, filename=None):
+def resize_img(img_slice, new_size, nn=False, plot=False, filepath=None, filename=None):
     """Resize an image with optional plotting.
     
     Resize an image to a desired size. The original image and resized image can
@@ -23,6 +23,10 @@ def resize_img(img_slice, new_size, plot=False, filepath=None, filename=None):
         Image to resize.
     new_size : tuple
         New size of image.
+    nn : bool, optional
+        Specify nearest neighbor interpolation when resizing images. If true,
+        nearest neighbor interpolation will be used. Specify true if resizing mask.
+        The default is False.
     plot : bool, optional
         Plot original image and resized image side-by-side. The default is False.
     filepath : str, optional
@@ -36,7 +40,10 @@ def resize_img(img_slice, new_size, plot=False, filepath=None, filename=None):
         DESCRIPTION.
 
     """
-    resized_img = cv2.resize(img_slice, dsize=new_size, interpolation=Image.LINEAR) # Reize cropped image with linear interpolation
+    if(nn is False):
+        resized_img = cv2.resize(img_slice, dsize=new_size, interpolation=Image.LINEAR) # Reize cropped image with linear interpolation
+    else:
+        resized_img = cv2.resize(img_slice, dsize=new_size, interpolation=Image.NEAREST) # Reize cropped image with linear interpolation
     
     if(plot == True):
         fig, ax = plt.subplots(1, 2, figsize=(50, 10.0))
