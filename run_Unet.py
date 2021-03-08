@@ -11,14 +11,23 @@ import load_Unet as lm
 import resize_img as ri
 import numpy as np
 import SimpleITK as sitk
+import argparse
 import ntpath
 
+# Initialize argument parser
+parser = argparse.ArgumentParser(description='Specify the Unet and image to annotate.')
+parser.add_argument("--m", required=True, choices=['Lumen','Outer_Rectal_Wall'], type=str, help="Choose which U-Net model and thus region to annotate on image.")
+parser.add_argument("--i", required=True, type=str, help='Absolute path to .mha file that will be annotated. Must include the .mha file extension.')
+
+# Parse arguments
+args = parser.parse_args()
+
 # Load in the model
-Model_Name = '/Volumes/GoogleDrive/Shared drives/INVent/tom/Post-CRT_Unet/Training_Lumen_Unet.hdf5'
+Model_Name = 'Training_' + args.m + '_Unet.hdf5'
 unet = lm.load_Unet_model(Model_Name)
 
 # Load in the image
-image_path = '/Volumes/GoogleDrive/Shared drives/INVent_Data/Rectal/newdata/UH/RectalCA145-2/RectalCA145-2_Post_Ax.mha'
+image_path = args.i
 image_np, image_mha = ld.load_image(image_path)
 
 # Predict on the slices
@@ -44,14 +53,16 @@ predictions_reshaped = ri.resize_img(predictions_reshaped, new_size, nn=True) # 
 predictions_reshaped = np.transpose(predictions_reshaped,[2,0,1]) # Swtich to (z,y,x) because converting it to a .mha file will flip the axes back to (x,y,z)
 
 # Set lumen label
-predictions_reshaped[predictions_reshaped == 1] = 2
+if('Lumen' in Model_Name):
+    predictions_reshaped[predictions_reshaped == 1] = 2
+if('Outer_Rectal_Wall' in Model_Name):
+    predictions_reshaped[predictions_reshaped == 1] = 8
 
 # Create export filename
 filename = ntpath.basename(image_path)
 export_name = filename[:len(filename)-4] + '_prediction_label' + filename[(len(filename)-4):]
 
 # Export the mask as .mha file
-
 export_vol = sitk.GetImageFromArray(predictions_reshaped)
 
 export_vol.SetSpacing(image_mha.GetSpacing())
