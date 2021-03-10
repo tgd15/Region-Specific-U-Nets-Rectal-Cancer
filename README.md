@@ -74,7 +74,4 @@ If you find a bug, please fix it and submit a pull request.
 <h1 align="center">
   <br>
   <a href="https://engineering.case.edu/groups/inventlab/home"><img src="https://engineering.case.edu/groups/inventlab/sites/engineering.case.edu.groups.inventlab/files/invent_lab_logo_site_header.png" alt="INVent Lab Logo" width="400"></a>
-  <br>
-  INVent Laboratory
-  <br>
 </h1>
