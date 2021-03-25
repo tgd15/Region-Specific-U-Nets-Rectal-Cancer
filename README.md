@@ -53,7 +53,7 @@ conda env create --file environment.yml
 source activate postcrt
 ```
 
-If you don't use Conda, ensure your environment as the required dependencies noted in the dependencies.
+If you don't use Conda, ensure your environment has the required dependencies noted in the dependencies.
 
 ## Running the Code
 
