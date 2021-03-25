@@ -41,6 +41,20 @@ cd Post-Treatment_Unet
 
 ```
 
+If you have Conda installed, create a Conda environment from the `environment.yml` file in the repository root and activate it.
+- On Windows:
+```bash
+conda env create --file environment.yml
+conda activate postcrt
+```
+- On MacOS/Linux:
+```bash
+conda env create --file environment.yml
+source activate postcrt
+```
+
+If you don't use Conda, ensure your environment as the required dependencies noted in the dependencies.
+
 ## Running the Code
 
 Once you have everything installed, run the code by executing `run_Unet.py` from your command line. `run_Unet.py` requires two arguments:
