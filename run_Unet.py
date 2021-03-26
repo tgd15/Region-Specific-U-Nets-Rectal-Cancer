@@ -39,7 +39,7 @@ if('Lumen' in Model_Name):
     threshold = 0.901763019988
 if('Outer_Rectal_Wall' in Model_Name):
     threshold = 0.976268057096
-    
+
 predictions = (predictions > threshold).astype(np.float32)
 
 # Squeeze the predictions
@@ -60,8 +60,11 @@ if('Outer_Rectal_Wall' in Model_Name):
 
 # Create export filename
 filename = ntpath.basename(image_path)
-export_name = filename[:len(filename)-4] + '_prediction_label' + filename[(len(filename)-4):]
-
+if('Lumen' in Model_Name):
+    export_name = filename[:len(filename)-4] + '_Lumen_prediction_label' + filename[(len(filename)-4):]
+if('Outer_Rectal_Wall' in Model_Name):
+    export_name = filename[:len(filename)-4] + '_ORW_prediction_label' + filename[(len(filename)-4):]
+    
 # Export the mask as .mha file
 export_vol = sitk.GetImageFromArray(predictions_reshaped)
 
