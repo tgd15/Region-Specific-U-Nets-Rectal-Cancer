@@ -31,7 +31,7 @@ Note running the U-Nets on higher versions of each package has **not** been test
 
 ### Installation
 
-To clone and run this application, you'll need Git nstalled on your computer. From your command line:
+To clone and run this application, you'll need Git installed on your computer. From your command line:
 ```bash
 # Clone this repository (assuming you are using the HTML protocol)
 git clone https://github.com/tgd15/Post-Treatment_Unet.git
@@ -57,7 +57,7 @@ If you don't use Conda, ensure your environment has the required dependencies no
 
 ## Running the Code
 
-Once you have everything installed, run the code by executing `run_Unet.py` from your command line. `run_Unet.py` requires two arguments:
+Once you have everything installed, run the code in the `postcrt` conda environment by executing `run_Unet.py` from your command line. `run_Unet.py` requires two arguments:
 
 1. **--m**, specify the U-Net you want to run as a string. Allowed choices are `Outer_Rectal_Wall` or `Lumen`.
 2. **--i**, specify the filepath to .mha file you want to annotate as a string.
