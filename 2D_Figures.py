@@ -13,8 +13,8 @@ import h5py
 import matplotlib.pyplot as plt
 
 # Specify filepaths
-unet = "Rectal Wall"
-dataset = "Rectal_Wall"
+unet = input("Unet Name: ")
+dataset = input("Dataset Name: ")
 
 seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert1/seg/"
 seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert2/seg/"
@@ -92,29 +92,25 @@ for k in range(len(seg1_slices)):
     fig, ax = plt.subplots(1, 4, figsize=(20, 10))
     
     ax[0].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[0].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    ax[0].contour(expert2_slice_list_np[k], colors='c', levels=[1])
-    ax[0].set_title('Image Annotated by 2 experts (Red = Expert 1 and Cyan = Expert 2')
+    ax[0].set_title('Image')
     ax[0].grid(False)
     
     ax[1].imshow(images1[k], cmap='gray', interpolation='bilinear')
     ax[1].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    ax[1].contour(seg1_slice_list_np[k], colors='#00FF00', levels=[1])
-    ax[1].set_title('U-Net Compared to Expert 1')
+    ax[1].contour(expert2_slice_list_np[k], colors='c', levels=[1])
+    ax[1].set_title('Image Annotated by 2 experts (Red = Expert 1 and Cyan = Expert 2')
     ax[1].grid(False)
     
     ax[2].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[2].contour(expert2_slice_list_np[k], colors='c', levels=[1])
-    ax[2].contour(seg2_slice_list_np[k], colors='#00FF00', levels=[1])
-    ax[2].set_title('U-Net Compared to Expert 2')
+    ax[2].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
+    ax[2].contour(seg1_slice_list_np[k], colors='#00FF00', levels=[1])
+    ax[2].set_title('U-Net Compared to Expert 1')
     ax[2].grid(False)
     
     ax[3].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[3].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    ax[3].contour(seg1_slice_list_np[k], colors='#00FF00', levels=[1])
     ax[3].contour(expert2_slice_list_np[k], colors='c', levels=[1])
-    ax[3].contour(seg2_slice_list_np[k], colors='#FF3200', levels=[1])
-    ax[3].set_title('U-Net Segmentation for Expert 1 (green) and Expert 2 (orange)')
+    ax[3].contour(seg2_slice_list_np[k], colors='#00FF00', levels=[1])
+    ax[3].set_title('U-Net Compared to Expert 2')
     ax[3].grid(False)
     
     ax[0].set_axis_off()
