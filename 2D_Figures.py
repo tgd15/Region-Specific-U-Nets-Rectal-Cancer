@@ -16,14 +16,22 @@ import matplotlib.pyplot as plt
 unet = input("Unet Name: ")
 dataset = input("Dataset Name: ")
 
-seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert1/seg/"
-seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert2/seg/"
-expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/ExperttoExpert/expert1/"
-expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/ExperttoExpert/expert2/"
+if(unet == "Segmentation Fusion"):
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + "/Results/Expert1/seg/"
+    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + "/Results/Expert2/seg/"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Rectal Wall U-Net/Results/ExperttoExpert/expert1/"
+    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Rectal Wall U-Net/Results/ExperttoExpert/expert2/"
+    out_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/" + unet + "/"
+else:
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert1/seg/"
+    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert2/seg/"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/ExperttoExpert/expert1/"
+    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/ExperttoExpert/expert2/"
+    out_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/" + dataset + "/"
+    
 images1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/" + dataset + "_Testing_Dataset_expert1.hdf5"
 images2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/" + dataset + "_Testing_Dataset_expert2.hdf5"
 pt_names_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Volumes/"
-out_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/" + dataset + "/"
 
 # Get list of patient names
 pt_names = os.listdir(pt_names_path)
@@ -118,7 +126,6 @@ for k in range(len(seg1_slices)):
     ax[2].set_axis_off()
     ax[3].set_axis_off()
     fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
-    
     
     
 # Select a patient
