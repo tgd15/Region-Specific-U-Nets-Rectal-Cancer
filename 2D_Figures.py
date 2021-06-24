@@ -98,7 +98,7 @@ for k in range(len(seg1_slices)):
     ax[1].imshow(images1[k], cmap='gray', interpolation='bilinear')
     ax[1].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
     ax[1].contour(expert2_slice_list_np[k], colors='c', levels=[1])
-    ax[1].set_title('Image Annotated by 2 experts (Red = Expert 1 and Cyan = Expert 2')
+    ax[1].set_title('Image Annotated by 2 experts \n (Red = Expert 1 and Cyan = Expert 2)')
     ax[1].grid(False)
     
     ax[2].imshow(images1[k], cmap='gray', interpolation='bilinear')
@@ -117,7 +117,7 @@ for k in range(len(seg1_slices)):
     ax[1].set_axis_off()
     ax[2].set_axis_off()
     ax[3].set_axis_off()
-    fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight')
+    fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
     
     
     
