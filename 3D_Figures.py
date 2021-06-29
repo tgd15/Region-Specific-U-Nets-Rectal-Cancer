@@ -15,6 +15,25 @@ import SimpleITK as sitk
 import resize_img as ri
 import h5py
 
+def find_sub_list(sub_list,this_list):
+    """
+    https://stackoverflow.com/questions/17870544/find-starting-and-ending-indices-of-sublist-in-list
+
+    Parameters
+    ----------
+    sub_list : TYPE
+        DESCRIPTION.
+    this_list : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    TYPE
+        DESCRIPTION.
+
+    """
+    return (this_list.index(sub_list[0]),this_list.index(sub_list[-1]))
+
 # Specify filepaths
 seg_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/CCA_Expert1/seg/"
 expert_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/ExperttoExpert/expert1/"
@@ -31,21 +50,24 @@ expert_slices = os.listdir(expert_path)
 
 # Read in cropped images
 with h5py.File(images_path, 'r') as f:
-        images = f['testing_Images'][()]
-        filenames = f['testing_image_filenames'][()]
+        all_images = f['testing_Images'][()]
+        all_filenames = f['testing_image_filenames'][()]
 
-images = images.squeeze()
-filenames = filenames.tolist()
-filenames=[x.decode('utf-8') for x in filenames]
+all_images = all_images.squeeze()
+all_filenames = all_filenames.tolist()
+all_filenames=[x.decode('utf-8') for x in all_filenames]
 
 # Select a patient
-pt = pt_names[0]
-print(pt_names[0])
+pt = pt_names[18]
+print(pt)
 
 # Filter slices by selected patient
 seg_slices = [slice_name for slice_name in seg_slices if pt in slice_name]
 expert_slices = [expert_name for expert_name in expert_slices if pt in expert_name]
-filenames = [image_name for image_name in filenames if pt in image_name]
+filenames = [image_name for image_name in all_filenames if pt in image_name]
+
+image_indices = find_sub_list(filenames, all_filenames)
+images = all_images[image_indices[0]:image_indices[1],:,:]
 
 # Load in .mat files into array
 seg_slice_list = []
