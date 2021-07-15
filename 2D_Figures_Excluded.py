@@ -64,58 +64,66 @@ for i in range(len(seg1_slices)):
 seg1_slice_list_np = np.array(seg1_slice_list)
 expert1_slice_list_np = np.array(expert1_slice_list)
 
-# Create whole plots
-out_path = root_out + "Whole/"
-for k in range(len(seg1_slices)):
-    plt.axis('off')
-    fig, ax = plt.subplots(1, 3, figsize=(20, 10))
+# Specify Plot parameters
+
+expert1_color = '#FF0068'
+seg_color = '#00FF00'
+thickness = 2
+out_dpi = 300
+a = 0.5
+
+# # Create whole plots
+# out_path = root_out + "Whole/"
+# for k in range(len(seg1_slices)):
+#     plt.axis('off')
+#     fig, ax = plt.subplots(1, 3, figsize=(20, 10))
     
-    ax[0].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[0].set_title('Image')
-    ax[0].grid(False)
+#     ax[0].imshow(images1[k], cmap='gray', interpolation='bilinear')
+#     # ax[0].set_title('Image')
+#     ax[0].grid(False)
     
-    ax[1].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[1].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    ax[1].set_title('Image Annotated by Expert')
-    ax[1].grid(False)
+#     ax[1].imshow(images1[k], cmap='gray', interpolation='bilinear')
+#     ax[1].contour(expert1_slice_list_np[k], colors=expert1_color, linewidths=thickness, alpha=a)
+#     # ax[1].set_title('Image Annotated by Expert')
+#     ax[1].grid(False)
     
-    ax[2].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[2].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    ax[2].contour(seg1_slice_list_np[k], colors='#00FF00', levels=[1])
-    ax[2].set_title('U-Net Compared to Expert 1')
-    ax[2].grid(False)
+#     ax[2].imshow(images1[k], cmap='gray', interpolation='bilinear')
+#     ax[2].contour(expert1_slice_list_np[k], colors=expert1_color, linewidths=thickness, alpha=a)
+#     ax[2].contour(seg1_slice_list_np[k], colors='#00FF00', linewidths=thickness, alpha=a)
+#     # ax[2].set_title('U-Net Compared to Expert 1')
+#     ax[2].grid(False)
     
-    ax[0].set_axis_off()
-    ax[1].set_axis_off()
-    ax[2].set_axis_off()
-    fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
-    plt.close()
+#     ax[0].set_axis_off()
+#     ax[1].set_axis_off()
+#     ax[2].set_axis_off()
+#     fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=out_dpi)
+#     plt.close()
     
 
-# Create Original Image plots
-out_path = root_out + "Original_Image/"
-for k in range(len(seg1_slices)):
-    plt.axis('off')
-    fig = plt.figure(frameon=False)
-    plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
-    plt.title('Image')
-    plt.grid(False)
-    plt.axis("off")
-    fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
-    plt.close()
+# # Create Original Image plots
+# out_path = root_out + "Original_Image/"
+# for k in range(len(seg1_slices)):
+#     plt.axis('off')
+#     fig = plt.figure(frameon=False)
+#     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
+#     # plt.title('Image')
+#     plt.grid(False)
+#     plt.axis("off")
+#     fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=out_dpi)
+#     plt.close()
     
-# Create image with expert annotation
-out_path = root_out + "Expert/"
-for k in range(len(seg1_slices)):
-    plt.axis('off')
-    fig = plt.figure(frameon=False)
-    plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
-    plt.contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    plt.title('Image with Expert Annotation')
-    plt.grid(False)
-    plt.axis("off")
-    fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
-    plt.close()
+# # Create image with expert annotation
+# out_path = root_out + "Expert/"
+# for k in range(len(seg1_slices)):
+#     plt.axis('off')
+#     fig = plt.figure(frameon=False)
+#     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
+#     plt.contour(expert1_slice_list_np[k], colors=expert1_color, linewidths=thickness, alpha=a)
+#     # plt.title('Image with Expert Annotation')
+#     plt.grid(False)
+#     plt.axis("off")
+#     fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=out_dpi)
+#     plt.close()
     
 # Create image with segmentation and expert annotation
 out_path = root_out + "Segmentation/"
@@ -123,21 +131,10 @@ for k in range(len(seg1_slices)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
-    plt.contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    plt.contour(seg1_slice_list_np[k], colors='#00FF00', levels=[1])
-    plt.title('Image with Expert Annotation')
+    plt.contour(expert1_slice_list_np[k], colors=expert1_color, linewidths=thickness, alpha=a)
+    plt.contour(seg1_slice_list_np[k], colors='#00FF00', linewidths=thickness, alpha=a)
+    # plt.title('Image with Expert Annotation')
     plt.grid(False)
     plt.axis("off")
-    fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
+    fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=out_dpi)
     plt.close()
-
-    
-    
-# Select a patient
-# pt = pt_names[0]
-# print(pt_names[0])
-
-# # Filter slices by selected patient
-# seg_slices = [slice_name for slice_name in seg_slices if pt in slice_name]
-# expert_slices = [expert_name for expert_name in expert_slices if pt in expert_name]
-# filenames = [image_name for image_name in filenames if pt in image_name]

@@ -58,6 +58,14 @@ for i in range(len(seg1_slices)):
 seg1_slice_list_np = np.array(seg1_slice_list)
 expert1_slice_list_np = np.array(expert1_slice_list)
 
+# Specify Plot parameters
+
+expert1_color = '#FF0068'
+seg_color = '#00FF00'
+thickness = 2
+out_dpi = 300
+a = 0.5
+
 # Create plots
 out_path = root_out + "Whole/"
 for k in range(len(seg1_slices)):
@@ -65,18 +73,18 @@ for k in range(len(seg1_slices)):
     fig, ax = plt.subplots(1, 3, figsize=(20, 10))
     
     ax[0].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[0].set_title('Image')
+    # ax[0].set_title('Image')
     ax[0].grid(False)
     
     ax[1].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[1].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    ax[1].set_title('Image Annotated Expert')
+    ax[1].contour(expert1_slice_list_np[k], colors=expert1_color, linewidths=thickness, alpha=a)
+    # ax[1].set_title('Image Annotated Expert')
     ax[1].grid(False)
     
     ax[2].imshow(images1[k], cmap='gray', interpolation='bilinear')
-    ax[2].contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    ax[2].contour(seg1_slice_list_np[k], colors='#00FF00', levels=[1])
-    ax[2].set_title('U-Net Compared to Expert')
+    ax[2].contour(expert1_slice_list_np[k], colors=expert1_color, linewidths=thickness, alpha=a)
+    ax[2].contour(seg1_slice_list_np[k], colors='#00FF00', linewidths=thickness, alpha=a)
+    # ax[2].set_title('U-Net Compared to Expert')
     ax[2].grid(False)
     
     ax[0].set_axis_off()
@@ -91,7 +99,7 @@ for k in range(len(seg1_slices)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
-    plt.title('Image')
+    # plt.title('Image')
     plt.grid(False)
     plt.axis("off")
     fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
@@ -103,8 +111,8 @@ for k in range(len(seg1_slices)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
-    plt.contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    plt.title('Image with Expert Annotation')
+    plt.contour(expert1_slice_list_np[k], colors=expert1_color, linewidths=thickness, alpha=a)
+    # plt.title('Image with Expert Annotation')
     plt.grid(False)
     plt.axis("off")
     fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
@@ -116,9 +124,9 @@ for k in range(len(seg1_slices)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
-    plt.contour(expert1_slice_list_np[k], colors='#FF1493', levels=[1])
-    plt.contour(seg1_slice_list_np[k], colors='#00FF00', levels=[1])
-    plt.title('Image with Expert Annotation')
+    plt.contour(expert1_slice_list_np[k], colors=expert1_color, linewidths=thickness, alpha=a)
+    plt.contour(seg1_slice_list_np[k], colors='#00FF00', linewidths=thickness, alpha=a)
+    # plt.title('Image with Expert Annotation')
     plt.grid(False)
     plt.axis("off")
     fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=400)
