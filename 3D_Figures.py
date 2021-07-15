@@ -58,7 +58,7 @@ all_filenames = all_filenames.tolist()
 all_filenames=[x.decode('utf-8') for x in all_filenames]
 
 # Select a patient
-pt = pt_names[18]
+pt = pt_names[12]
 print(pt)
 
 # Filter slices by selected patient
@@ -67,7 +67,7 @@ expert_slices = [expert_name for expert_name in expert_slices if pt in expert_na
 filenames = [image_name for image_name in all_filenames if pt in image_name]
 
 image_indices = find_sub_list(filenames, all_filenames)
-images = all_images[image_indices[0]:image_indices[1],:,:]
+images = all_images[image_indices[0]:image_indices[1]+1,:,:]
 
 # Load in .mat files into array
 seg_slice_list = []
@@ -87,6 +87,9 @@ for i in range(len(seg_slices)):
 # Convert lists to arrays
 seg_slice_list_np = np.array(seg_slice_list)
 expert_slice_list_np = np.array(expert_slice_list)
+
+# Change expert label to 2
+expert_slice_list_np[expert_slice_list_np == 1] = 2
 
 # Load in the patient (reference) volume to initialize params for export
 ref_vol = sitk.ReadImage(pt_names_path + pt +".mha")
@@ -117,14 +120,21 @@ for k, index in enumerate(slice_nums):
     expert_vol[:,:,index] = expert_slice_list_np[:,:,k]
 
 # Undo the swap axes
-seg_vol = np.transpose(seg_vol,[2,0,1]) # Swtich to (z,y,x) because converting it to a .mha file will flip the axes back to (x,y,z)
-expert_vol = np.transpose(expert_vol,[2,0,1]) # Swtich to (z,y,x) because converting it to a .mha file will flip the axes back to (x,y,z)
-images = np.transpose(images,[2,0,1])
+seg_vol = np.swapaxes(seg_vol, 2, 0)
+expert_vol = np.swapaxes(expert_vol, 2, 0)
+images = np.swapaxes(images, 2, 0)
+# seg_vol = np.transpose(seg_vol,[2,0,1]) # Swtich to (z,y,x) because converting it to a .mha file will flip the axes back to (x,y,z)
+# expert_vol = np.transpose(expert_vol,[2,0,1]) # Swtich to (z,y,x) because converting it to a .mha file will flip the axes back to (x,y,z)
+# images = np.transpose(images,[2,0,1])
+
+# Create merge volume
+merge_vol = seg_vol + expert_vol
 
 # Create sitk Image
 seg_vol = sitk.GetImageFromArray(seg_vol)
 expert_vol = sitk.GetImageFromArray(expert_vol)
 images_vol = sitk.GetImageFromArray(images)
+merge_vol = sitk.GetImageFromArray(merge_vol)
 
 # Copy export params from reference volume to segmentation and expert volumes
 seg_vol.SetSpacing(ref_vol.GetSpacing())
@@ -139,11 +149,12 @@ images_vol.SetSpacing(ref_vol.GetSpacing())
 images_vol.SetDirection(ref_vol.GetDirection())
 images_vol.SetOrigin(ref_vol.GetOrigin())
 
-# Export segmentation and expert volumes as .mha
-sitk.WriteImage(seg_vol, pt + "_Seg_Vol.mha")
-sitk.WriteImage(expert_vol, pt + "_Expert_Vol_Vol.mha")
-sitk.WriteImage(images_vol, pt + ".mha")
+merge_vol.SetSpacing(ref_vol.GetSpacing())
+merge_vol.SetDirection(ref_vol.GetDirection())
+merge_vol.SetOrigin(ref_vol.GetOrigin())
 
-# verts, faces, normals, values = measure.marching_cubes_lewiner(expert_slice_list_np, spacing=(1,1,1))
-# mesh = mlab.triangular_mesh([vert[0] for vert in verts], [vert[1] for vert in verts], [vert[2] for vert in verts], faces)
-# mlab.show()
+# # Export segmentation and expert volumes as .mha
+sitk.WriteImage(seg_vol, pt + "_Seg_Vol.mha")
+sitk.WriteImage(expert_vol, pt + "_Expert_Vol.mha")
+sitk.WriteImage(images_vol, pt + ".mha")
+sitk.WriteImage(merge_vol, pt + "_merge_Vol.mha" )
