@@ -4,6 +4,10 @@
 Created on Thu Jul  1 10:30:31 2021
 
 @author: Tom
+
+Styling with Pandas:
+    - https://pandas.pydata.org/pandas-docs/stable/user_guide/style.html#Table-Styles
+    - https://pbpython.com/styling-pandas.html
 """
 
 import os
@@ -66,14 +70,46 @@ def load_excel(excel_path, metric):
         
     return df, df_np
 
-stat_file = open("Statistical_Testing_Results.txt", "w")
+def write_table(data, row_length):
+    out = '<table>'
+    counter = 0
+    for element in data:
+        if counter % row_length == 0:
+            out += '<tr>'
+        out += ('<td>%s</td>' % element)
+        counter += 1
+        if counter % row_length == 0:
+            out += '</tr>'
+    if counter % row_length != 0:
+        for i in range(0, row_length - counter % row_length):
+            out += '<td>&nbsp;</td>'
+        out += '</tr>'
+    out += '</table>'
+    return out
 
+def bold_significant(val):
+
+
+    bold = 'bold' if val < 0.05 else ''
+    return 'font-weight: %s' % bold
+
+# Open text and HTML files that will store statistical testing results
+stat_file = open("Statistical_Testing_Results.txt", "w")
+HTML_File=open('Statistical_Testing_Results.html','w')
+
+# Create dataframe that will hold statistical testing results
+output_table = pd.DataFrame(columns=["U-Net", "Compared To", "Metric", "p-Value", "Statistic", "Significance"])
+
+# Open document with all fielapths
 filepaths = pd.read_excel("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Filepaths.xlsx")
+
+# Create lists of expert and prediction filepaths
 expert_paths = filepaths["expert"].to_list()
 expert_paths = [s.replace("\ufeff","") for s in expert_paths]
 pred_paths = filepaths["unet"].to_list()
 pred_paths = [s.replace("\ufeff","") for s in pred_paths]
 
+# Store output text of statistical testing
 all_text_outputs = []
 
 for index, path in enumerate(expert_paths):
@@ -83,42 +119,48 @@ for index, path in enumerate(expert_paths):
     # Parse path for unet, expert number, and metric
     unet, expert, metric = parse_path(expert_excel_path, pred_excel_path)
     
-    print("U-Net: %s \n Expert: %s \n Metric: %s \n" % (unet, expert, metric))
+    # print("U-Net: %s \n Expert: %s \n Metric: %s \n" % (unet, expert, metric))
 
     # Load in the metrics
     expert_df, expert_np = load_excel(expert_excel_path, metric)
     pred_df, pred_np = load_excel(pred_excel_path, metric)
 
     # Compute p-value via Wilcoxon Ranksum
-    #statistic, pval = ranksums(expert_np, pred_np)
-    statistic, pval = ttest_ind(expert_np, pred_np)
+    statistic, pval = ranksums(expert_np, pred_np)
+    #statistic, pval = ttest_ind(expert_np, pred_np)
     
     # Write results to text file
     out_text = "U-Net: %s \nExpert: %s \nMetric: %s \np-Value: %s \nStatistic: %s \n\n" % (unet, expert, metric, pval, statistic)
     all_text_outputs.append(out_text)
     stat_file.write(out_text)
-
-stat_file.close()
-
-def print_table(data, row_length):
-    print ('<table>')
-    counter = 0
-    for element in data:
-        if counter % row_length == 0:
-            print ('<tr>')
-        print ('<td>%s</td>' % element)
-        counter += 1
-        if counter % row_length == 0:
-            print ('</tr>')
-    if counter % row_length != 0:
-        for i in range(0, row_length - counter % row_length):
-            print ('<td>&nbsp;</td>')
-        print ('</tr>')
-    print ('</table>')
     
-HTML_File=open('stats.html','w')
-HTML_File.write(str(print_table(all_text_outputs,1)))
+    # Determine significance
+    if(pval < 0.05):
+        significance = True
+    else:
+        significance = False
+    
+    # Create temporary dataframe and merge with output dataframe
+    temp_df = {'U-Net': unet, 'Compared To': expert, 'Metric': metric, 'p-Value': pval, 'Statistic':statistic, "Significance":significance}
+    output_table = output_table.append(temp_df, ignore_index = True)
+
+# Apple some styling to output dataframe
+s = output_table.style.set_table_styles([{'selector': 'tr:hover','props': [('background-color', 'yellow')]}])
+s.format('{0:,.20f}', subset=['p-Value', 'Statistic'])
+s.applymap(bold_significant,subset=['p-Value'])
+
+# Write the formatted HTML dataframe to HTML file    
+HTML_File.write(s.render())
+
+# Close files
+stat_file.close()
 HTML_File.close()
+    
+
+    
+
+
+
 
 
 
