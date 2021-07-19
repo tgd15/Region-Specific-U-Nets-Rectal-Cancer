@@ -8,6 +8,9 @@ Created on Thu Jul  1 10:30:31 2021
 Styling with Pandas:
     - https://pandas.pydata.org/pandas-docs/stable/user_guide/style.html#Table-Styles
     - https://pbpython.com/styling-pandas.html
+    
+Computing Confidence Interval:
+    - https://stackoverflow.com/questions/15033511/compute-a-confidence-interval-from-sample-data
 """
 
 import os
@@ -17,6 +20,7 @@ import pandas as pd
 from pathlib import Path
 from scipy.stats import ranksums
 from scipy.stats import ttest_ind
+import scipy.stats as st
 
 def parse_path(expertpath, segpath):
     
@@ -98,7 +102,7 @@ stat_file = open("Statistical_Testing_Results.txt", "w")
 HTML_File=open('Statistical_Testing_Results.html','w')
 
 # Create dataframe that will hold statistical testing results
-output_table = pd.DataFrame(columns=["U-Net", "Compared To", "Metric", "p-Value", "Statistic", "Significance"])
+output_table = pd.DataFrame(columns=["U-Net", "Compared To", "Metric", "p-Value", "Statistic", "Significance", "Confidence"])
 
 # Open document with all fielapths
 filepaths = pd.read_excel("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Filepaths.xlsx")
@@ -128,9 +132,10 @@ for index, path in enumerate(expert_paths):
     # Compute p-value via Wilcoxon Ranksum
     statistic, pval = ranksums(expert_np, pred_np)
     #statistic, pval = ttest_ind(expert_np, pred_np)
+    interval = st.t.interval(alpha=0.95, df=len(pred_np)-1, loc=np.mean(pred_np), scale=st.sem(pred_np))
     
     # Write results to text file
-    out_text = "U-Net: %s \nExpert: %s \nMetric: %s \np-Value: %s \nStatistic: %s \n\n" % (unet, expert, metric, pval, statistic)
+    out_text = "U-Net: %s \nExpert: %s \nMetric: %s \np-Value: %s \nStatistic: %s \nInterval: %s \n\n" % (unet, expert, metric, pval, statistic, interval)
     all_text_outputs.append(out_text)
     stat_file.write(out_text)
     
@@ -141,7 +146,7 @@ for index, path in enumerate(expert_paths):
         significance = False
     
     # Create temporary dataframe and merge with output dataframe
-    temp_df = {'U-Net': unet, 'Compared To': expert, 'Metric': metric, 'p-Value': pval, 'Statistic':statistic, "Significance":significance}
+    temp_df = {'U-Net': unet, 'Compared To': expert, 'Metric': metric, 'p-Value': pval, 'Statistic':statistic, "Significance":significance, "Confidence": interval}
     output_table = output_table.append(temp_df, ignore_index = True)
 
 # Apple some styling to output dataframe
