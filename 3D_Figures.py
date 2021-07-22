@@ -35,10 +35,10 @@ def find_sub_list(sub_list,this_list):
     return (this_list.index(sub_list[0]),this_list.index(sub_list[-1]))
 
 # Specify filepaths
-seg_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/CCA_Expert1/seg/"
-expert_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/ExperttoExpert/expert1/"
+seg_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/CCA_Expert2/seg/"
+expert_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/ExperttoExpert/expert2/"
 pt_names_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Volumes/"
-images_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/ORW_Testing_Dataset_expert1.hdf5"
+images_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/ORW_Testing_Dataset_expert2.hdf5"
 
 # Get list of patient names
 pt_names = os.listdir(pt_names_path)
@@ -94,12 +94,17 @@ expert_slice_list_np[expert_slice_list_np == 1] = 2
 # Load in the patient (reference) volume to initialize params for export
 ref_vol = sitk.ReadImage(pt_names_path + pt +".mha")
 
-new_size = ref_vol.GetSize()
+#new_size = ref_vol.GetSize()
+new_size = images.shape
 new_size = new_size[:2]
 
 # Create empty volume array
-seg_vol = np.zeros(ref_vol.GetSize())
-expert_vol = np.zeros(ref_vol.GetSize())
+#seg_vol = np.zeros(ref_vol.GetSize())
+seg_vol = np.zeros(images.shape)
+seg_vol = np.swapaxes(seg_vol, 0, 2)
+#expert_vol = np.zeros(ref_vol.GetSize())
+expert_vol = np.zeros(images.shape)
+expert_vol = np.swapaxes(expert_vol, 0, 2)
 
 # Get slice numbers of expert and segmentation from filenames
 slice_nums = [i.split('_',3)[3] for i in seg_slices]
@@ -111,13 +116,13 @@ expert_slice_list_np = np.swapaxes(expert_slice_list_np, 0, 2) # Switch to (x,y,
 images = np.swapaxes(images, 0, 2)
 
 # Resize the slices
-seg_slice_list_np = ri.resize_img(seg_slice_list_np, new_size, nn=True) # Resize to original image size
-expert_slice_list_np = ri.resize_img(expert_slice_list_np, new_size, nn=True) # Resize to original image size
-images = ri.resize_img(images, new_size)
+# seg_slice_list_np = ri.resize_img(seg_slice_list_np, new_size, nn=True) # Resize to original image size
+# expert_slice_list_np = ri.resize_img(expert_slice_list_np, new_size, nn=True) # Resize to original image size
+# images = ri.resize_img(images, new_size)
 
-for k, index in enumerate(slice_nums):
-    seg_vol[:,:,index] = seg_slice_list_np[:,:,k]
-    expert_vol[:,:,index] = expert_slice_list_np[:,:,k]
+for k in range(len(slice_nums)):
+    seg_vol[:,:,k] = seg_slice_list_np[:,:,k]
+    expert_vol[:,:,k] = expert_slice_list_np[:,:,k]
 
 # Undo the swap axes
 seg_vol = np.swapaxes(seg_vol, 2, 0)
@@ -154,7 +159,7 @@ merge_vol.SetDirection(ref_vol.GetDirection())
 merge_vol.SetOrigin(ref_vol.GetOrigin())
 
 # # Export segmentation and expert volumes as .mha
-sitk.WriteImage(seg_vol, pt + "_Seg_Vol.mha")
-sitk.WriteImage(expert_vol, pt + "_Expert_Vol.mha")
-sitk.WriteImage(images_vol, pt + ".mha")
-sitk.WriteImage(merge_vol, pt + "_merge_Vol.mha" )
+sitk.WriteImage(seg_vol, pt + "_Seg_Vol2.mha")
+sitk.WriteImage(expert_vol, pt + "_Expert2_Vol.mha")
+sitk.WriteImage(images_vol, pt + "2.mha")
+sitk.WriteImage(merge_vol, pt + "_merge_Vol2.mha" )
