@@ -1,0 +1,168 @@
+U-Net: Outer Rectal Wall U-Net 
+Expert: Expert1 
+Metric: Dice 
+p-Value: 3.59078444008783e-13 
+Statistic: 7.270153796392668 
+Interval: (0.8988249080735949, 0.9128253716466844) 
+
+U-Net: Outer Rectal Wall U-Net 
+Expert: Expert2 
+Metric: Dice 
+p-Value: 9.838320554933868e-11 
+Statistic: 6.46941476640997 
+Interval: (0.8990971701731452, 0.914466326330351) 
+
+U-Net: Outer Rectal Wall U-Net 
+Expert: Expert1 
+Metric: Hausdorff 
+p-Value: 0.464215235485125 
+Statistic: 0.7319235430457958 
+Interval: (2.6081782795818405, 2.7528420001384393) 
+
+U-Net: Outer Rectal Wall U-Net 
+Expert: Expert2 
+Metric: Hausdorff 
+p-Value: 0.18611216687222876 
+Statistic: 1.3221681423979705 
+Interval: (2.595598459002599, 2.7386120305078907) 
+
+U-Net: Outer Rectal Wall U-Net 
+Expert: Expert1 
+Metric: FD 
+p-Value: 0.36373916534883743 
+Statistic: 0.9082632283216062 
+Interval: (2.825867648422395, 2.9864106732559264) 
+
+U-Net: Outer Rectal Wall U-Net 
+Expert: Expert2 
+Metric: FD 
+p-Value: 0.5254119369790964 
+Statistic: 0.6350252654839085 
+Interval: (2.8476995614148044, 3.0181591798439373) 
+
+U-Net: Lumen U-Net 
+Expert: Expert1 
+Metric: Dice 
+p-Value: 0.028344746397551527 
+Statistic: -2.1924816536587852 
+Interval: (0.7852210278297704, 0.8352145176247749) 
+
+U-Net: Lumen U-Net 
+Expert: Expert2 
+Metric: Dice 
+p-Value: 0.057364672918093614 
+Statistic: -1.9005218304044307 
+Interval: (0.801108375794908, 0.8431284074218752) 
+
+U-Net: Lumen U-Net 
+Expert: Expert1 
+Metric: Hausdorff 
+p-Value: 0.005123397652161588 
+Statistic: 2.7991711304039697 
+Interval: (2.4468590504354357, 2.6175227677463826) 
+
+U-Net: Lumen U-Net 
+Expert: Expert2 
+Metric: Hausdorff 
+p-Value: 0.008228059792117942 
+Statistic: 2.642565297999771 
+Interval: (2.4417801429069836, 2.5944219549951146) 
+
+U-Net: Lumen U-Net 
+Expert: Expert1 
+Metric: FD 
+p-Value: 0.013348948941785916 
+Statistic: 2.474321552363596 
+Interval: (2.621830205276169, 2.7920320324860692) 
+
+U-Net: Lumen U-Net 
+Expert: Expert2 
+Metric: FD 
+p-Value: 0.013664178065661881 
+Statistic: 2.4659726146102217 
+Interval: (2.6215484948675103, 2.786402554083539) 
+
+U-Net: Rectal Wall U-Net 
+Expert: Expert1 
+Metric: Dice 
+p-Value: 1.113731939155163e-09 
+Statistic: 6.092194578825704 
+Interval: (0.6619320534290944, 0.7021573311862901) 
+
+U-Net: Rectal Wall U-Net 
+Expert: Expert2 
+Metric: Dice 
+p-Value: 4.0279784845828824e-12 
+Statistic: 6.936196286257704 
+Interval: (0.6605305584412299, 0.6989115044958331) 
+
+U-Net: Rectal Wall U-Net 
+Expert: Expert1 
+Metric: Hausdorff 
+p-Value: 0.002749079651208367 
+Statistic: -2.9944856742101758 
+Interval: (3.4397772428491113, 3.593053526381658) 
+
+U-Net: Rectal Wall U-Net 
+Expert: Expert2 
+Metric: Hausdorff 
+p-Value: 0.1430284221166625 
+Statistic: -1.4646060804328074 
+Interval: (3.376708926187306, 3.533315549337171) 
+
+U-Net: Rectal Wall U-Net 
+Expert: Expert1 
+Metric: FD 
+p-Value: 0.0004719685559952136 
+Statistic: -3.4961809337538376 
+Interval: (3.7442121218102864, 3.9327955704974062) 
+
+U-Net: Rectal Wall U-Net 
+Expert: Expert2 
+Metric: FD 
+p-Value: 0.021678289673234007 
+Statistic: -2.2959578821778766 
+Interval: (3.6844833142470885, 3.871471930508157) 
+
+U-Net: Segmentation Fusion 
+Expert: Expert1 
+Metric: Dice 
+p-Value: 6.1820851910568645e-06 
+Statistic: 4.520064300053988 
+Interval: (0.6894967608897549, 0.7257491132361191) 
+
+U-Net: Segmentation Fusion 
+Expert: Expert2 
+Metric: Dice 
+p-Value: 3.206485397143206e-09 
+Statistic: 5.920661857710927 
+Interval: (0.6809856094848, 0.7167689219837313) 
+
+U-Net: Segmentation Fusion 
+Expert: Expert1 
+Metric: Hausdorff 
+p-Value: 0.1014405137646048 
+Statistic: -1.6379097883437546 
+Interval: (3.350076217046523, 3.47904196477166) 
+
+U-Net: Segmentation Fusion 
+Expert: Expert2 
+Metric: Hausdorff 
+p-Value: 0.4835827819616687 
+Statistic: -0.7005517769422083 
+Interval: (3.317758576941072, 3.446217646835151) 
+
+U-Net: Segmentation Fusion 
+Expert: Expert1 
+Metric: FD 
+p-Value: 0.029213700480068164 
+Statistic: -2.1805907423130706 
+Interval: (3.6378178376293464, 3.7989884560769482) 
+
+U-Net: Segmentation Fusion 
+Expert: Expert2 
+Metric: FD 
+p-Value: 0.082461499586798 
+Statistic: -1.7365790527018121 
+Interval: (3.6190517125542665, 3.779062273459721) 
+

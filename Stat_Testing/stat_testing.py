@@ -193,7 +193,7 @@ def gen_boxplot(expert_data, pred_data, unet, expert, metric, out_dpi=300, appen
 
     """
     # Specify output directory
-    outpath = '/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Boxplots/'
+    outpath = '/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Testing/Boxplots/'
     
     # Set customization options
     boxprops = dict(linewidth=2, color='blue')
@@ -345,7 +345,7 @@ else:
 output_table = pd.DataFrame(columns=["U-Net", "Compared To", "Metric", "p-Value", "Statistic", "Significance", "Confidence"])
 
 # Open document with all fielapths
-filepaths = pd.read_excel("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Filepaths.xlsx")
+filepaths = pd.read_excel("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Testing/Stat_Filepaths.xlsx")
 
 # Create lists of expert and prediction filepaths
 expert_paths = filepaths["expert"].to_list()
