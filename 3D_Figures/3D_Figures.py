@@ -10,10 +10,72 @@ import numpy as np
 import scipy.io as sio
 import os
 from pathlib import Path
-import skimage.measure as measure
 import SimpleITK as sitk
-import resize_img as ri
 import h5py
+
+def parse_path(expertpath, segpath):
+    """Parse filepath to excel document containing metrics.
+    
+    Parse a filepath to an excel document containing metrics to get the following information:
+        - U-Net type
+        - Expert Number (Expert 1 or Expert 2)
+        - Metric (Dice, Hausdorff, FD)
+    
+
+    Parameters
+    ----------
+    expertpath : str
+        Path to excel document containing metrics for expert 1 vs. expert 2.
+    segpath : str
+        Path to excel document containing metrics for U-Net vs. Expert.
+
+    Raises
+    ------
+    ValueError
+        Raise error when expertpath and segpath do not have the same U-Net and metric in filename.
+
+    Returns
+    -------
+    unet : str
+        U-Net name.
+    expert : str
+        Expert 1 or Expert 2.
+    metric : str
+        Metric name.
+    """
+    
+    def do_parse(path):
+        """Sub-function for actually parsing filename.
+        
+        Parameters
+        ----------
+        path : str
+            Filename to parse.
+
+        Returns
+        -------
+        unet : str
+            U-Net name.
+        expert : str
+            Expert 1 or Expert 2.
+        metric : str
+            Metric name.
+        """
+        thepath = Path(path)
+        unet = thepath.parts[7]
+        return unet
+    
+    ex_unet = do_parse(expertpath)
+    seg_unet = do_parse(segpath)
+    
+    if(ex_unet == seg_unet):
+        unet = ex_unet
+    elif(ex_unet == "Rectal Wall U-Net" and seg_unet == "Segmentation Fusion"):
+        unet = seg_unet
+    else:
+        raise ValueError("Filepaths do not correspond to each other!")
+    
+    return unet
 
 def find_sub_list(sub_list,this_list):
     """
@@ -36,15 +98,18 @@ def find_sub_list(sub_list,this_list):
 
 # Ask for expert
 expert = input("Please specify 'expert1' or 'expert2':")
+patient = input("Please specify a patient ID: ")
 
 # Capitalize first letter for the seg_path
 expert_for_seg_path = expert.capitalize()
     
 # Specify filepaths
-seg_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/CCA_" + expert_for_seg_path + "/seg/"
-expert_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/ExperttoExpert/"+ expert + "/"
+seg_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Segmentation Fusion/Results/" + expert_for_seg_path + "/seg/"
+expert_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Rectal Wall U-Net/Results/ExperttoExpert/"+ expert + "/"
 pt_names_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Volumes/"
-images_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/ORW_Testing_Dataset_"+ expert + ".hdf5"
+images_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/Rectal_Wall_Testing_Dataset_"+ expert + ".hdf5"
+
+unet = parse_path(expert_path, seg_path)
 
 # Get list of patient names
 pt_names = os.listdir(pt_names_path)
@@ -63,17 +128,23 @@ all_images = all_images.squeeze()
 all_filenames = all_filenames.tolist()
 all_filenames=[x.decode('utf-8') for x in all_filenames]
 
-# Select a patient
-pt = pt_names[12]
+# Create directories
+#pt = pt_names[12]
+index = pt_names.index(patient)
+pt = pt_names[index]
 print("Writing volumes for " + pt)
 if(os.path.isdir(pt) is False):
     os.mkdir(pt)
+   
+base_output = pt + "/" + unet
+if(os.path.isdir(base_output) is False):
+    os.mkdir(base_output)
 
 # Create output filenames
-seg_vol_name = pt + "/" + pt + "_Seg_Vol_for_" + expert + ".mha"
-expert_vol_name = pt + "/" + pt + "_" + expert + "_Vol_gt.mha"
-image_vol_name = pt + "/" + pt + "_Image_Vol.mha"
-merge_vol_name = pt + "/" + pt + "_merge_Vol_for_" + expert + ".mha"
+seg_vol_name = base_output + "/" + pt + "_Seg_Vol_for_" + expert + ".mha"
+expert_vol_name = base_output + "/" + pt + "_" + expert + "_Vol_gt.mha"
+image_vol_name = base_output + "/" + pt + "_Image_Vol.mha"
+merge_vol_name = base_output + "/" + pt + "_merge_Vol_for_" + expert + ".mha"
 
 # Filter slices by selected patient
 seg_slices = [slice_name for slice_name in seg_slices if pt in slice_name]
@@ -113,10 +184,8 @@ new_size = images.shape
 new_size = new_size[:2]
 
 # Create empty volume array
-#seg_vol = np.zeros(ref_vol.GetSize())
 seg_vol = np.zeros(images.shape)
 seg_vol = np.swapaxes(seg_vol, 0, 2)
-#expert_vol = np.zeros(ref_vol.GetSize())
 expert_vol = np.zeros(images.shape)
 expert_vol = np.swapaxes(expert_vol, 0, 2)
 
@@ -129,11 +198,6 @@ seg_slice_list_np = np.swapaxes(seg_slice_list_np, 0, 2) # Switch to (x,y,z)
 expert_slice_list_np = np.swapaxes(expert_slice_list_np, 0, 2) # Switch to (x,y,z)
 images = np.swapaxes(images, 0, 2)
 
-# Resize the slices
-# seg_slice_list_np = ri.resize_img(seg_slice_list_np, new_size, nn=True) # Resize to original image size
-# expert_slice_list_np = ri.resize_img(expert_slice_list_np, new_size, nn=True) # Resize to original image size
-# images = ri.resize_img(images, new_size)
-
 for k in range(len(slice_nums)):
     seg_vol[:,:,k] = seg_slice_list_np[:,:,k]
     expert_vol[:,:,k] = expert_slice_list_np[:,:,k]
@@ -142,9 +206,6 @@ for k in range(len(slice_nums)):
 seg_vol = np.swapaxes(seg_vol, 2, 0)
 expert_vol = np.swapaxes(expert_vol, 2, 0)
 images = np.swapaxes(images, 2, 0)
-# seg_vol = np.transpose(seg_vol,[2,0,1]) # Swtich to (z,y,x) because converting it to a .mha file will flip the axes back to (x,y,z)
-# expert_vol = np.transpose(expert_vol,[2,0,1]) # Swtich to (z,y,x) because converting it to a .mha file will flip the axes back to (x,y,z)
-# images = np.transpose(images,[2,0,1])
 
 # Create merge volume
 merge_vol = seg_vol + expert_vol
@@ -176,6 +237,6 @@ merge_vol.SetOrigin(ref_vol.GetOrigin())
 sitk.WriteImage(seg_vol, seg_vol_name)
 sitk.WriteImage(expert_vol, expert_vol_name)
 sitk.WriteImage(images_vol, image_vol_name)
-sitk.WriteImage(merge_vol, merge_vol_name)
+#sitk.WriteImage(merge_vol, merge_vol_name)
 
 print("\n All volumes have been generated for " + pt + ". You can load them into Paraview")
