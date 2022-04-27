@@ -26,6 +26,7 @@ from scipy.stats import ranksums
 from scipy.stats import ttest_ind
 import matplotlib.pyplot as plt
 import scipy.stats as st
+import os
 
 def parse_path(expertpath, segpath):
     """Parse filepath to excel document containing metrics.
@@ -77,8 +78,13 @@ def parse_path(expertpath, segpath):
         """
         thepath = Path(path)
         unet = thepath.parts[7]
-        expert = thepath.parts[9]
-        expert = expert.split("_")[-1]
+        
+        if(unet == 'Fat U-Net'):
+            expert = thepath.parts[10]
+            expert = expert.split("_")[-1]
+        else:
+            expert = thepath.parts[9]
+            expert = expert.split("_")[-1]
         metric = thepath.parts[-1]
         metric = metric.split("_")[0]
         return unet, expert, metric
@@ -157,7 +163,7 @@ def load_excel(excel_path, metric):
         
     return df, df_np
 
-def gen_boxplot(expert_data, pred_data, unet, expert, metric, out_dpi=300, appendString = None):
+def gen_boxplot(expert_data, pred_data, unet, expert, metric, box_path, out_dpi=300, appendString = None):
     """Generate a boxplot of expert vs. U-Net segmentation.
     
     The boxplot contains 2 boxes:
@@ -176,6 +182,8 @@ def gen_boxplot(expert_data, pred_data, unet, expert, metric, out_dpi=300, appen
         U-Net segmentation was evaluated on this expert annotation.
     metric : str
         Metric name.
+    out_path: str
+        Directory to save boxplot
     out_dpi : int, optional
         dpi for output boxplot file. The default is 300.
     appendString : str, optional
@@ -191,10 +199,7 @@ def gen_boxplot(expert_data, pred_data, unet, expert, metric, out_dpi=300, appen
     -------
     None.
 
-    """
-    # Specify output directory
-    outpath = '/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Testing/Boxplots/'
-    
+    """    
     # Set customization options
     boxprops = dict(linewidth=2, color='blue')
     medianprops = dict(linewidth=2.5, color='green') 
@@ -203,10 +208,10 @@ def gen_boxplot(expert_data, pred_data, unet, expert, metric, out_dpi=300, appen
     # Generate plot title
     if(appendString is not None):
         title = unet + " vs. " + expert + "\n" + metric + appendString
-        filename = outpath + unet + '_' + metric + '_' + expert + appendString + '.png'
+        filename = box_path + unet + '_' + metric + '_' + expert + appendString + '.png'
     else:
         title = unet + " vs. " + expert + "\n" + metric
-        filename = outpath + unet + '_' + metric + '_' + expert + '.png'
+        filename = box_path + unet + '_' + metric + '_' + expert + '.png'
     
     # Create figure
     fig, ax = plt.subplots()
@@ -333,19 +338,29 @@ append = None
 # append = "_90th_Percentile"
 # append = "_IQR"
 
+# Specify output directories
+outpath = '/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Testing/2022_04_27_Results/'
+boxplot_out = outpath + 'Boxplots/'
+
+if not os.path.isdir(outpath):
+    os.mkdir(outpath)
+    
+if not os.path.isdir(boxplot_out):
+    os.mkdir(boxplot_out)
+
 # Open text and HTML files that will store statistical testing results
 if(append is not None):
-    stat_file = open("Statistical_Testing_Results" + append + ".txt", "w")
-    HTML_File=open('Statistical_Testing_Results' + append + '.html','w')
+    stat_file = open(outpath + "Statistical_Testing_Results" + append + ".txt", "w")
+    HTML_File=open(outpath + 'Statistical_Testing_Results' + append + '.html','w')
 else:
-    stat_file = open("Statistical_Testing_Results.txt", "w")
-    HTML_File=open('Statistical_Testing_Results.html','w')
+    stat_file = open(outpath + "Statistical_Testing_Results.txt", "w")
+    HTML_File=open(outpath + 'Statistical_Testing_Results.html','w')
 
 # Create dataframe that will hold statistical testing results
 output_table = pd.DataFrame(columns=["U-Net", "Compared To", "Metric", "p-Value", "Statistic", "Significance", "Confidence"])
 
 # Open document with all fielapths
-filepaths = pd.read_excel("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Testing/Stat_Filepaths.xlsx")
+filepaths = pd.read_excel("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/Stat_Testing/2022_04_27_Stat_Filepaths.xlsx")
 
 # Create lists of expert and prediction filepaths
 expert_paths = filepaths["expert"].to_list()
@@ -371,19 +386,19 @@ for index, path in enumerate(expert_paths):
 
     if(append is None):
         # Generate boxplot
-        gen_boxplot(expert_np, pred_np, unet, expert, metric)
+        gen_boxplot(expert_np, pred_np, unet, expert, metric, boxplot_out)
         
     if(append == "_90th_Percentile"):
         # Calculate 90th percentile and generate boxplots
         expert_np = calculate_percentile(expert_np, 90)
         pred_np = calculate_percentile(pred_np, 90)
-        gen_boxplot(expert_np, pred_np, unet, expert, metric, appendString=append)
+        gen_boxplot(expert_np, pred_np, unet, expert, metric, boxplot_out, appendString=append)
         
     if(append == "_IQR"):
         # Calculate IQR and generate boxplots
         expert_np, expert_IQR = calculate_IQR(expert_np)
         pred_np, expert_IQR = calculate_IQR(pred_np)
-        gen_boxplot(expert_np, pred_np, unet, expert, metric, appendString=append)
+        gen_boxplot(expert_np, pred_np, unet, expert, metric, boxplot_out, appendString=append)
     
     # Compute p-value via Wilcoxon Ranksum
     statistic, pval = ranksums(expert_np, pred_np)
