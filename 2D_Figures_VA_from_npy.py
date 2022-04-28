@@ -16,9 +16,14 @@ import matplotlib.pyplot as plt
 unet = input("Unet Name: ")
 dataset = input("Dataset Name: ")
 
-seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/2022-02-24/CCA_VA/seg/"
-expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/2022-02-24/CCA_VA/gt/"
-root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/VA/" + dataset + "/"
+if(unet == "Fat"):
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + unet + "_Unet_Predictions_VA.npy"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + unet + "_Unet_Gt_VA.npy"
+    root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/VA/" + dataset + "/"
+else:
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Predictions_VA.npy"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Gt_VA.npy"
+    root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/VA/" + dataset + "/"
     
 images1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/VA_Patients/Datasets/" + dataset + "_Testing_Dataset_VA.hdf5"
 pt_names_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/VA_Patients/Volumes/"
@@ -26,10 +31,6 @@ pt_names_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-Mult
 # Get list of patient names
 pt_names = os.listdir(pt_names_path)
 pt_names = sorted([name.replace(".mha","") for name in pt_names])
-
-# Get list of slices
-seg1_slices = os.listdir(seg1_path)
-expert1_slices = os.listdir(expert1_path)
 
 # Read in cropped images
 with h5py.File(images1_path, 'r') as f:
@@ -41,8 +42,8 @@ filenames1 = filenames1.tolist()
 filenames1=[x.decode('utf-8') for x in filenames1]
 
 # Read in data from .npy files
-seg1_slice_list_np = np.load("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/Fat_Unet_Predictions_VA.npy")
-expert1_slice_list_np = np.load("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/Fat_Unet_Gt_VA.npy")
+seg1_slice_list_np = np.load(seg1_path)
+expert1_slice_list_np = np.load(expert1_path)
 expert1_slice_list_np = expert1_slice_list_np.squeeze()
 
 # Specify Plot parameters
@@ -55,7 +56,7 @@ a = 0.5
 
 # Create plots
 out_path = root_out + "Whole/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig, ax = plt.subplots(1, 3, figsize=(20, 10))
     
@@ -82,7 +83,7 @@ for k in range(len(seg1_slices)):
     
 # Create Original Image plots
 out_path = root_out + "Original_Image/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
@@ -94,7 +95,7 @@ for k in range(len(seg1_slices)):
     
 # Create image with expert annotation
 out_path = root_out + "Expert/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
@@ -107,7 +108,7 @@ for k in range(len(seg1_slices)):
     
 # Create image with segmentation and expert annotation
 out_path = root_out + "Segmentation/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
