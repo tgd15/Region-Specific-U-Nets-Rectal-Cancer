@@ -334,8 +334,9 @@ def bold_significant(val, cutoff):
     return 'font-weight: %s' % bold
 
 # Uncomment these for no outlier removal, removing outliers outside of 90th percentile, or removing outliers outside of IQR
-append = None
-# append = "_90th_Percentile"
+#append = None
+percentile = 95
+append = str(percentile) + "th_Percentile"
 # append = "_IQR"
 
 # Specify output directories
@@ -390,8 +391,8 @@ for index, path in enumerate(expert_paths):
         
     if(append == "_90th_Percentile"):
         # Calculate 90th percentile and generate boxplots
-        expert_np = calculate_percentile(expert_np, 90)
-        pred_np = calculate_percentile(pred_np, 90)
+        expert_np = calculate_percentile(expert_np, percentile)
+        pred_np = calculate_percentile(pred_np, percentile)
         gen_boxplot(expert_np, pred_np, unet, expert, metric, boxplot_out, appendString=append)
         
     if(append == "_IQR"):
