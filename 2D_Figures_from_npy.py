@@ -17,16 +17,16 @@ unet = input("Unet Name: ")
 dataset = input("Dataset Name: ")
 
 if(unet == "Fat"):
-    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/2022-02-24/CCA_Expert1/seg/"
-    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/2022-02-24/CCA_Expert2/seg/"
-    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/Results/2022-02-24/ExperttoExpert/expert1/"
-    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/Results/2022-02-24/ExperttoExpert/expert2/"
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + unet + "_Unet_Predictions_Expert_1.npy"
+    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + unet + "_Unet_Predictions_Expert_2.npy"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/" + unet + "_Unet_Gt_Expert_1.npy"
+    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/" + unet + "_Unet_Gt_Expert_2.npy"
     root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Multiple_Experts/" + unet + "/"
 else:
-    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert1/seg/"
-    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert2/seg/"
-    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/ExperttoExpert/expert1/"
-    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/ExperttoExpert/expert2/"
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Predictions_Expert_1.npy"
+    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Predictions_Expert_2.npy"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Gt_Expert_1.npy"
+    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Gt_Expert_2.npy"
     root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Multiple_Experts/" + dataset+ "/"
     
 images1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/" + dataset + "_Testing_Dataset_expert1.hdf5"
@@ -41,15 +41,6 @@ try:
     pt_names.remove(".DS_Store")
 except Exception as e:
     print(".DS_Store not present in patinet list. yay!")
-
-# Get list of slices
-
-seg1_slices = os.listdir(seg1_path)
-seg1_slices = list(set(seg1_slices))
-expert1_slices = os.listdir(expert1_path)
-
-seg2_slices = os.listdir(seg2_path)
-expert2_slices = os.listdir(expert2_path)
 
 # Read in cropped images
 
@@ -71,11 +62,11 @@ filenames2=[x.decode('utf-8') for x in filenames2]
 
 # Read .npy files
 
-seg1_slice_list_np = np.load("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/Fat_Unet_Predictions_Expert_1.npy")
-seg2_slice_list_np = np.load("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/Fat_Unet_Predictions_Expert_2.npy")
+seg1_slice_list_np = np.load(seg1_path)
+seg2_slice_list_np = np.load(seg2_path)
 
-expert1_slice_list_np = np.load("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/Fat_Unet_Gt_Expert_1.npy")
-expert2_slice_list_np = np.load("/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/Fat_Unet_Gt_Expert_2.npy")
+expert1_slice_list_np = np.load(expert1_path)
+expert2_slice_list_np = np.load(expert2_path)
 
 expert1_slice_list_np = expert1_slice_list_np.squeeze()
 expert2_slice_list_np = expert2_slice_list_np.squeeze()
@@ -92,7 +83,7 @@ a = 0.5
 
 # Create plots
 out_path = root_out + "Whole/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig, ax = plt.subplots(1, 4, figsize=(20, 10))
     
@@ -127,7 +118,7 @@ for k in range(len(seg1_slices)):
     
 # Create Original Image plots
 out_path = root_out + "Original_Image/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
@@ -139,7 +130,7 @@ for k in range(len(seg1_slices)):
     
 # Create image with expert annotation
 out_path = root_out + "Expert/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
@@ -153,7 +144,7 @@ for k in range(len(seg1_slices)):
     
 # Create image with segmentation and expert annotation 1
 out_path = root_out + "Segmentation-Expert1/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
@@ -167,7 +158,7 @@ for k in range(len(seg1_slices)):
     
 # Create image with segmentation and expert annotation 2
 out_path = root_out + "Segmentation-Expert2/"
-for k in range(len(seg1_slices)):
+for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
     plt.imshow(images1[k], cmap='gray', interpolation='bilinear')
