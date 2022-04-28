@@ -16,12 +16,12 @@ import matplotlib.pyplot as plt
 unet = input("Unet Name: ")
 dataset = input("Dataset Name: ")
 
-if(unet == "Segmentation Fusion"):
-    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + "/Results/Expert1/seg/"
-    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + "/Results/Expert2/seg/"
-    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Rectal Wall U-Net/Results/ExperttoExpert/expert1/"
-    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Rectal Wall U-Net/Results/ExperttoExpert/expert2/"
-    root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/" + unet + "/"
+if(unet == "Fat"):
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/2022-02-24/CCA_Expert1/seg/"
+    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/2022-02-24/CCA_Expert2/seg/"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/Results/2022-02-24/ExperttoExpert/expert1/"
+    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/Results/2022-02-24/ExperttoExpert/expert2/"
+    root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Multiple_Experts/" + unet + "/"
 else:
     seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert1/seg/"
     seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Expert2/seg/"
@@ -37,10 +37,15 @@ pt_names_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-Mult
 
 pt_names = os.listdir(pt_names_path)
 pt_names = sorted([name.replace(".mha","") for name in pt_names])
+try:
+    pt_names.remove(".DS_Store")
+except Exception as e:
+    print(".DS_Store not present in patinet list. yay!")
 
 # Get list of slices
 
 seg1_slices = os.listdir(seg1_path)
+seg1_slices = list(set(seg1_slices))
 expert1_slices = os.listdir(expert1_path)
 
 seg2_slices = os.listdir(seg2_path)
