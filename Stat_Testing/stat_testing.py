@@ -389,7 +389,7 @@ for index, path in enumerate(expert_paths):
         # Generate boxplot
         gen_boxplot(expert_np, pred_np, unet, expert, metric, boxplot_out)
         
-    if(append == "_90th_Percentile"):
+    if("Percentile" in append):
         # Calculate 90th percentile and generate boxplots
         expert_np = calculate_percentile(expert_np, percentile)
         pred_np = calculate_percentile(pred_np, percentile)
