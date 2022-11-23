@@ -17,9 +17,14 @@ unet = input("Unet Name: ")
 dataset = input("Dataset Name: ")
 subgroup = input("Subgroup: ")
 
-seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Excluded_" + subgroup + "/seg/"
-expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Excluded_" + subgroup + "/gt/"
-root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Excluded/" + dataset + "/" + subgroup + "/"
+if(unet == "Fat"):
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/2022-02-24/CCA_Excluded_" + subgroup + "/seg/"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/2022-02-24/CCA_Excluded_" + subgroup + "/gt/"
+    root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Excluded/" + dataset + "/" + subgroup + "/"
+else:
+    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Excluded_" + subgroup + "/seg/"
+    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/Results/CCA_Excluded_" + subgroup + "/gt/"
+    root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Excluded/" + dataset + "/" + subgroup + "/"
     
 updated_subgroup = subgroup.replace("_"," ")    
 images1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Excluded Patients/Datasets/" + dataset + "_Testing_Dataset_excluded_" + updated_subgroup + ".hdf5"
