@@ -65,7 +65,7 @@ for patient in pt_files:
     fat_expert2 = fat_expert2_dsc[patient]
  
     # Initialize plot
-    fig, ax = plt.subplots(2, 1, sharey = True, figsize = (10, 10))
+    fig, ax = plt.subplots(sharey = True, figsize = (10, 10))
     
     # PLOT 1
     # Plot lumen DSC
@@ -73,13 +73,13 @@ for patient in pt_files:
     x = [ele.split("_")[-1] for ele in x]
     y = lumen_expert1.diceInfo_2
     
-    ax[0].plot(x, y, label = "Lumen Expert 1", marker = "o")
+    ax.plot(x, y, label = "Lumen Expert 1", marker = "o", color = "saddlebrown")
     
     # Plot ORW DSC
     x = list(orw_expert1.diceInfo_1)
     y = orw_expert1.diceInfo_2
     x = [ele.split("_")[-1] for ele in x]
-    ax[0].plot(x, y, label = "ORW Expert 1", marker = "o")
+    ax.plot(x, y, label = "ORW Expert 1", marker = "o", color = "blue")
     
     # Plot fat DSC
     # Some slice of lumen/ORW have no fat.
@@ -94,15 +94,12 @@ for patient in pt_files:
 
     y = fat_expert1.diceInfo_2
     
-    ax[0].plot(x, y, label = "Fat Expert 1", marker = "o")
-    
-    ax[0].grid()
-    ax[0].legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
-    ax[0].set_xticklabels(x)
-    ax[0].yaxis.set_ticks(np.arange(0, 1, 0.1))
-    ax[0].set_xlabel("Slice Number")
-    ax[0].set_ylabel("DSC")
-    ax[0].set_title(patient)
+    ax.plot(x, y, label = "Fat Expert 1", marker = "o", color = "green")
+    ax.set_xticklabels(x)
+    ax.yaxis.set_ticks(np.arange(0, 1, 0.1))
+    ax.set_xlabel("Slice Number")
+    ax.set_ylabel("DSC")
+    ax.set_title(patient)
     
     # PLOT 2
     # Plot lumen DSC
@@ -110,13 +107,13 @@ for patient in pt_files:
     x = [ele.split("_")[-1] for ele in x]
     y = lumen_expert2.diceInfo_2
     
-    ax[1].plot(x, y, label = "Lumen Expert 2", marker = "o")
+    ax.plot(x, y, label = "Lumen Expert 2", marker = "s", color = "saddlebrown", linestyle = ":")
     
     # Plot ORW DSC
     x = list(orw_expert2.diceInfo_1)
     x = [ele.split("_")[-1] for ele in x]
     y = orw_expert2.diceInfo_2
-    ax[1].plot(x, y, label = "ORW Expert 2", marker = "o")
+    ax.plot(x, y, label = "ORW Expert 2", marker = "s", color = "blue", linestyle = ":")
     
     # Plot fat DSC
     # Some slice of lumen/ORW have no fat.
@@ -131,13 +128,13 @@ for patient in pt_files:
 
     y = fat_expert2.diceInfo_2
     
-    ax[1].plot(x, y, label = "Fat Expert 2", marker = "o")
+    ax.plot(x, y, label = "Fat Expert 2", marker = "s", color = "green", linestyle = ":")
 
-    ax[1].grid()
-    ax[1].legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
-    ax[1].set_xticklabels(x)
-    ax[1].set_xlabel("Slice Number")
-    ax[1].set_ylabel("DSC")
+    ax.grid()
+    ax.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+    ax.set_xticklabels(x)
+    ax.set_xlabel("Slice Number")
+    ax.set_ylabel("DSC")
     
     fig.savefig("2D Figures/Comparisons/" + patient + ".png", dpi = 300, bbox_inches = "tight")
 
