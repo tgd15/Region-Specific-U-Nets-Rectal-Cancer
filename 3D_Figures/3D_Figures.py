@@ -104,10 +104,14 @@ patient = input("Please specify a patient ID: ")
 expert_for_seg_path = expert.capitalize()
     
 # Specify filepaths
-seg_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Segmentation Fusion/Results/" + expert_for_seg_path + "/seg/"
-expert_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Rectal Wall U-Net/Results/ExperttoExpert/"+ expert + "/"
+# seg_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Segmentation Fusion/Results/" + expert_for_seg_path + "/seg/"
+# expert_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Rectal Wall U-Net/Results/ExperttoExpert/"+ expert + "/"
+# pt_names_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Volumes/"
+# images_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/Rectal_Wall_Testing_Dataset_"+ expert + ".hdf5"
+seg_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/CCA_" + expert_for_seg_path + "/seg/"
+expert_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Outer Rectal Wall U-Net/Results/ExperttoExpert/"+ expert + "/"
 pt_names_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Volumes/"
-images_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/Rectal_Wall_Testing_Dataset_"+ expert + ".hdf5"
+images_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/ORW_Testing_Dataset_"+ expert + ".hdf5"
 
 unet = parse_path(expert_path, seg_path)
 
