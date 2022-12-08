@@ -39,9 +39,9 @@ lumen_expert2_dsc = parse_excel(lumen_expert2_path)
 lumen_reader_dsc = parse_excel(lumen_reader_path)
 
 # Read in Fat DSC scores
-fat_expert1_path = "../Fat U-Net/Results/2022-02-24/CCA_Expert1/Dice_Per_Slice.xlsx"
-fat_expert2_path = "../Fat U-Net/Results/2022-02-24/CCA_Expert2/Dice_Per_Slice.xlsx"
-fat_reader_path = "../Fat U-Net/Results/2022-02-24/ExperttoExpert/Dice_Per_Slice.xlsx"
+fat_expert1_path = "../Fat U-Net/Results/2022-11-23/CCA_Expert1/Dice_Per_Slice.xlsx"
+fat_expert2_path = "../Fat U-Net/Results/2022-11-23/CCA_Expert2/Dice_Per_Slice.xlsx"
+fat_reader_path = "../Fat U-Net/Results/2022-11-23/ExperttoExpert/Dice_Per_Slice.xlsx"
 
 fat_expert1_dsc = parse_excel(fat_expert1_path)
 fat_expert2_dsc = parse_excel(fat_expert2_path)
@@ -136,6 +136,6 @@ for patient in pt_files:
     ax.set_xlabel("Slice Number")
     ax.set_ylabel("DSC")
     
-    fig.savefig("2D Figures/Comparisons/" + patient + ".png", dpi = 300, bbox_inches = "tight")
+    fig.savefig("2D Figures/Comparisons/Readers/" + patient + ".png", dpi = 300, bbox_inches = "tight")
 
     
