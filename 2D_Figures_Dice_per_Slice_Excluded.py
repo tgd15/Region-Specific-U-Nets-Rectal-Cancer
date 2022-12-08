@@ -20,12 +20,12 @@ def parse_excel(excel_path):
         
     return xls_dict
 
-subgroup = "dark_lumen"
+subgroup = "low_quality"
 
 # Read in DSC scores
 orw_expert1_path = "../Outer Rectal Wall U-Net/Results/CCA_Excluded_" + subgroup + "/Dice_Per_Slice.xlsx"
 lumen_expert1_path = "../Lumen U-Net/Results/CCA_Excluded_" + subgroup + "/Dice_Per_Slice.xlsx"
-fat_expert1_path = "../Fat U-Net/Results/2022-02-24/CCA_Excluded_" + subgroup + "/Dice_Per_Slice.xlsx"
+fat_expert1_path = "../Fat U-Net/Results/2022-11-23/CCA_Excluded_" + subgroup + "/Dice_Per_Slice.xlsx"
 
 
 orw_expert1_dsc = parse_excel(orw_expert1_path)
