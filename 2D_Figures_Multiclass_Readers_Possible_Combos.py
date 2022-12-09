@@ -82,10 +82,13 @@ except Exception as e:
     print(".DS_Store not present in patinet list. yay!")
     
 
-pt = pt_names[18]
-slice_num = 18
+# 12 15 = 004, slice 15
+pt = pt_names[12]
+slice_num = 15
 
 full_pt_name = pt + "_" + str(slice_num)
+
+assert orw_filenames1.index(full_pt_name) == lumen_filenames1.index(full_pt_name) == fat_filenames1.index(full_pt_name)
 index_pos = orw_filenames1.index(full_pt_name)
 
 
