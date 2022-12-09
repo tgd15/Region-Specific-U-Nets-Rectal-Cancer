@@ -13,21 +13,20 @@ import h5py
 import matplotlib.pyplot as plt
 
 # Specify filepaths
-unet = input("Unet Name: ")
 dataset = input("Dataset Name: ")
 
-if(unet == "Fat"):
-    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + unet + "_Unet_Predictions_Expert_1.npy"
-    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + unet + "_Unet_Predictions_Expert_2.npy"
-    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/" + unet + "_Unet_Gt_Expert_1.npy"
-    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Fat U-Net/U_Net Code/" + unet + "_Unet_Gt_Expert_2.npy"
-    root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Multiple_Experts/" + unet + "/"
-else:
-    seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Predictions_Expert_1.npy"
-    seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Predictions_Expert_2.npy"
-    expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Gt_Expert_1.npy"
-    expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/" + unet + " U-Net/U_Net Code/" + dataset + "_Unet_Gt_Expert_2.npy"
-    root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Multiple_Experts/" + dataset+ "/"
+# if(unet == "Fat"):
+#         seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Multiclass U-Net/U_Net Code/npy_files/" + dataset + "/" + dataset + "_Multiclass_Unet_Predictions_expert1.npy"
+#         seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Multiclass U-Net/U_Net Code/npy_files/" + dataset + "/" + dataset + "_Multiclass_Unet_Predictions_expert2.npy"
+#         expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Multiclass U-Net/U_Net Code/npy_files/" + dataset + "/" + dataset + "_Multiclass_Unet_Gt_expert1.npy"
+#         expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Multiclass U-Net/U_Net Code/npy_files/" + dataset + "/" + dataset + "_Multiclass_Unet_Gt_expert2.npy"
+#         root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Multiple_Experts/" + unet + "/"
+# else:
+seg1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Multiclass U-Net/U_Net Code/npy_files/" + dataset + "/" + dataset + "_Multiclass_Unet_Predictions_expert1.npy"
+seg2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Multiclass U-Net/U_Net Code/npy_files/" + dataset + "/" + dataset + "_Multiclass_Unet_Predictions_expert2.npy"
+expert1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Multiclass U-Net/U_Net Code/npy_files/" + dataset + "/" + dataset + "_Multiclass_Unet_Gt_expert1.npy"
+expert2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Multiclass U-Net/U_Net Code/npy_files/" + dataset + "/" + dataset + "_Multiclass_Unet_Gt_expert2.npy"
+root_out = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Figures/2D Figures/Multiclass/Multiple_Experts/" + dataset + "/"
     
 images1_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/" + dataset + "_Testing_Dataset_expert1.hdf5"
 images2_path = "/Volumes/GoogleDrive/My Drive/tom/Rectal Segmentation/Data-MultipleExperts/Testing/Datasets/" + dataset + "_Testing_Dataset_expert2.hdf5"
@@ -117,7 +116,7 @@ for k in range(len(seg1_slice_list_np)):
     plt.close()
     
 # Create Original Image plots
-out_path = root_out + "Original_Image/"
+out_path = root_out + "Original/"
 for k in range(len(seg1_slice_list_np)):
     plt.axis('off')
     fig = plt.figure(frameon=False)
@@ -140,6 +139,7 @@ for k in range(len(seg1_slice_list_np)):
     plt.grid(False)
     plt.axis("off")
     fig.savefig(out_path + filenames1[k] + '.png', bbox_inches='tight', dpi=out_dpi)
+    fig.canvas.flush_events()
     plt.close()
     
 # Create image with segmentation and expert annotation 1
